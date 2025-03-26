@@ -93,6 +93,8 @@ function updateTime() {
   }
 }
 
+const MAX_JUMP_HEIGHT = 10; // Altura máxima que o porquinho pode pular
+
 function gameLoop() {
   if (!isGameRunning) return;
 
@@ -114,6 +116,12 @@ function gameLoop() {
   if (player.y > canvas.height) {
     endGame();
     return;
+  }
+
+  // Limita a altura do salto
+  if (player.y < MAX_JUMP_HEIGHT) {
+    player.y = MAX_JUMP_HEIGHT; // Impede que o porquinho suba além do teto
+    player.velocityY = 0; // Reseta a velocidade vertical para evitar que continue subindo
   }
 
   // Desenha o porquinho
@@ -140,7 +148,7 @@ function gameLoop() {
       player.x + player.width > platform.x &&
       player.x < platform.x + platform.width
     ) {
-      player.velocityY = player.jumpPower;
+      player.velocityY = player.jumpPower; // Permite que o porquinho pule novamente
     }
   });
 
