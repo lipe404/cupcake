@@ -17,8 +17,8 @@ backgroundImage.src = 'imgs/fundo.jpg'; // Substitua pelo caminho da sua imagem 
 const player = {
   x: 180,
   y: 550, // Começa no chão
-  width: 40,
-  height: 40,
+  width: 50,
+  height: 50,
   velocityY: 0,
   velocityX: 0,
   speed: 5,
