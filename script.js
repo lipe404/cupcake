@@ -3,13 +3,19 @@ const ctx = canvas.getContext("2d");
 canvas.width = 400;
 canvas.height = 600;
 
+// Carregar imagens
+const pigImage = new Image();
+pigImage.src = 'imgs/pig.png'; // Substitua pelo caminho da sua imagem do porquinho
+
+const platformImage = new Image();
+platformImage.src = 'imgs/fundo.png'; // Substitua pelo caminho da sua imagem da plataforma
+
 // Definição do porquinho-da-índia
 const player = {
   x: 180,
   y: 550, // Começa no chão
   width: 40,
   height: 40,
-  color: "#ffcc00",
   velocityY: 0,
   velocityX: 0,
   speed: 5,
@@ -30,8 +36,7 @@ function createPlatforms() {
       x: Math.random() * (canvas.width - platformWidth),
       y: i * 100,
       width: platformWidth,
-      height: platformHeight,
-      color: "#ff00ff"
+      height: platformHeight
     });
   }
 }
@@ -83,6 +88,10 @@ function gameLoop() {
   if (!isGameRunning) return;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Desenha o fundo
+  ctx.fillStyle = "#87CEEB"; // Cor de fundo (céu)
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Atualiza a posição do jogador
   player.velocityY += player.gravity;
@@ -100,8 +109,7 @@ function gameLoop() {
   }
 
   // Desenha o porquinho
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.drawImage(pigImage, player.x, player.y, player.width, player.height);
 
   // Atualiza plataformas e verifica colisão
   platforms.forEach((platform) => {
@@ -113,8 +121,8 @@ function gameLoop() {
       document.getElementById("score").innerText = "Pontuação: " + score;
     }
 
-    ctx.fillStyle = platform.color;
-    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+    // Desenha a plataforma
+    ctx.drawImage(platformImage, platform.x, platform.y, platform.width, platform.height);
 
     // Detecção de colisão
     if (
