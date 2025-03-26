@@ -67,6 +67,9 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
+// Carregar o elemento de áudio
+const gameMusic = document.getElementById("gameMusic");
+
 function startGame() {
   if (!isGameRunning) {
     isGameRunning = true;
@@ -79,6 +82,9 @@ function startGame() {
     gameInterval = setInterval(updateTime, 1000); // Atualiza o tempo a cada segundo
     document.getElementById("startButton").innerText = "Reiniciar Jogo"; // Muda o texto do botão
     document.getElementById("startButton").style.display = "none"; // Esconde o botão
+
+    // Reproduz a música
+    gameMusic.play(); // Inicia a música
   } else {
     endGame(); // Se o jogo já está rodando, termina o jogo
   }
