@@ -5,7 +5,7 @@ canvas.height = 600;
 
 // Carregar imagens
 const pigImage = new Image();
-pigImage.src = 'imgs/pig.png'; // Substitua pelo caminho da sua imagem do porquinho
+pigImage.src = 'imgs/pig2.png'; // Substitua pelo caminho da sua imagem do porquinho
 
 const platformImage = new Image();
 platformImage.src = 'imgs/fundo.png'; // Substitua pelo caminho da sua imagem da plataforma
