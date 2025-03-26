@@ -10,6 +10,10 @@ pigImage.src = 'imgs/pig2.png'; // Substitua pelo caminho da sua imagem do porqu
 const platformImage = new Image();
 platformImage.src = 'imgs/fundo.png'; // Substitua pelo caminho da sua imagem da plataforma
 
+const backgroundImage = new Image();
+backgroundImage.src = 'imgs/fundo.jpg'; // Substitua pelo caminho da sua imagem de fundo
+
+
 // Definição do porquinho-da-índia
 const player = {
   x: 180,
@@ -90,8 +94,7 @@ function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   // Desenha o fundo
-  ctx.fillStyle = "#87CEEB"; // Cor de fundo (céu)
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 
   // Atualiza a posição do jogador
   player.velocityY += player.gravity;
