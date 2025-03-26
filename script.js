@@ -13,7 +13,6 @@ platformImage.src = 'imgs/fundo.png'; // Substitua pelo caminho da sua imagem da
 const backgroundImage = new Image();
 backgroundImage.src = 'imgs/fundo.jpg'; // Substitua pelo caminho da sua imagem de fundo
 
-
 // Definição do porquinho-da-índia
 const player = {
   x: 180,
@@ -69,14 +68,19 @@ document.addEventListener("keyup", (event) => {
 });
 
 function startGame() {
-  isGameRunning = true;
-  score = 0;
-  timeElapsed = 0;
-  player.y = 550; // Reseta a posição do jogador
-  player.velocityY = player.jumpPower;
-  createPlatforms();
-  gameLoop();
-  gameInterval = setInterval(updateTime, 1000); // Atualiza o tempo a cada segundo
+  if (!isGameRunning) {
+    isGameRunning = true;
+    score = 0; // Reseta a pontuação
+    timeElapsed = 0; // Reseta o tempo
+    player.y = 550; // Reseta a posição do jogador
+    player.velocityY = player.jumpPower; // Reseta a velocidade vertical
+    createPlatforms(); // Cria novas plataformas
+    gameLoop();
+    gameInterval = setInterval(updateTime, 1000); // Atualiza o tempo a cada segundo
+    document.getElementById("startButton").innerText = "Reiniciar Jogo"; // Muda o texto do botão
+  } else {
+    endGame(); // Se o jogo já está rodando, termina o jogo
+  }
 }
 
 function updateTime() {
@@ -146,6 +150,5 @@ function endGame() {
   isGameRunning = false;
   clearInterval(gameInterval);
   alert("Game Over! Sua pontuação: " + score);
-  document.getElementById("startButton").innerText = "Reiniciar Jogo";
-  document.getElementById("startButton").onclick = startGame; // Permite reiniciar o jogo
+  document.getElementById("startButton").innerText = "Pula Porquinho"; // Reseta o texto do botão
 }
