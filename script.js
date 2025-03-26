@@ -70,6 +70,10 @@ document.addEventListener("keyup", (event) => {
 // Carregar o elemento de áudio
 const gameMusic = document.getElementById("gameMusic");
 
+// Configurar volume e loop
+gameMusic.volume = 0.1; // Define o volume
+gameMusic.loop = true; // Habilita o loop
+
 function startGame() {
   if (!isGameRunning) {
     isGameRunning = true;
