@@ -38,8 +38,24 @@ canvas {
   margin: 0px auto;
 }
 
+#controls {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  margin-top: 0px; /* Espaço acima do botão */
+}
+
+#game-container {
+  position: relative; /* Define o contêiner como relativo */
+}
+
 /* Estilo do botão */
 #startButton {
+  position: absolute; /* Permite que o botão seja posicionado em relação ao contêiner */
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Ajusta a posição para o centro exato */
+  z-index: 5; /* Garante que o botão fique acima do canvas */
+  display: inline-block;
   background: #ff00ff;
   border: none;
   padding: 15px;
@@ -54,7 +70,6 @@ canvas {
 }
 
 #startButton:hover {
-  transform: scale(1.1);
   background: #ff33ff;
 }
 
