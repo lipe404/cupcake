@@ -149,6 +149,18 @@ function gameLoop() {
 function endGame() {
   isGameRunning = false;
   clearInterval(gameInterval);
-  alert("Game Over! Sua pontuação: " + score);
-  document.getElementById("startButton").innerText = "Pula Porquinho"; // Reseta o texto do botão
+
+  // Atualiza a pontuação final
+  document.getElementById("finalScore").innerText = score;
+
+  // Exibe a mensagem de Game Over
+  document.getElementById("gameOverMessage").classList.remove("hidden");
+  document.getElementById("startButton").classList.add("hidden"); // Esconde o botão de iniciar
+
+  // Adiciona evento para reiniciar o jogo
+  document.getElementById("restartButton").onclick = function() {
+      document.getElementById("gameOverMessage").classList.add("hidden");
+      document.getElementById("startButton").classList.remove("hidden"); // Mostra o botão de iniciar novamente
+      startGame(); // Reinicia o jogo
+  };
 }
