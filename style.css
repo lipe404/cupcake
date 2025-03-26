@@ -1,0 +1,84 @@
+/* Estilo Geral do jogo */
+body {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    background: linear-gradient(90deg, #C9E4CA, #F7CAC9, #C5CAE9);
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  h1 {
+    font-size: 24px;
+    text-shadow: 1px 1px 2px #000;
+    color: #FFC5C5;
+  }
+  
+  #score {
+    font-size: 18px;
+    text-shadow: 1px 1px 2px #000;
+    color: #C5CAE9;
+  }
+  
+  /* Estilo do canvas */
+  canvas {
+    display: block;
+    background: linear-gradient(180deg, #2b1055, #7597de);
+    border: 1px solid #ff00ff;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #ff00ff;
+    margin: 20px auto;
+  }
+  
+  /* Estilo do botão */
+  #startButton {
+    background: #ff00ff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    text-shadow: 1px 1px 2px #000;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ff00ff;
+    transition: transform 0.2s ease;
+  }
+  
+  #startButton:hover {
+    transform: scale(1.1);
+    background: #ff33ff;
+  }
+  
+  /* Adicione mais elementos decorativos */
+  .triangulo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 0 50px 86.6px;
+    border-color: transparent transparent transparent #C9E4CA;
+  }
+  
+  .circulo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #F7CAC9;
+    box-shadow: 0 0 10px #ff00ff;
+  }
+  
+  .linha {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 2px;
+    background-color: #C5CAE9;
+  }
