@@ -23,7 +23,7 @@ const player = {
   velocityX: 0,
   speed: 5,
   gravity: 0.2,
-  jumpPower: -8
+  jumpPower: -7
 };
 
 // Lista de plataformas
@@ -41,6 +41,37 @@ function createPlatforms() {
       width: platformWidth,
       height: platformHeight
     });
+  }
+}
+
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.size = Math.random() * 5 + 2; // Tamanho aleatório da partícula
+    this.speedY = Math.random() * -3 - 1; // Velocidade vertical aleatória
+    this.speedX = Math.random() * 2 - 1; // Velocidade horizontal aleatória
+    this.alpha = 1; // Opacidade inicial
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= 0.02; // Diminui a opacidade
+  }
+
+  draw(ctx) {
+    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`; // Cor branca com opacidade
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+const particles = [];
+function createParticles(x, y) {
+  const particleCount = 10; // Número de partículas a serem geradas
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle(x, y));
   }
 }
 
@@ -137,6 +168,16 @@ function gameLoop() {
   // Desenha o porquinho
   ctx.drawImage(pigImage, player.x, player.y, player.width, player.height);
 
+  // Atualiza e desenha partículas
+  particles.forEach((particle, index) => {
+    particle.update();
+    particle.draw(ctx);
+    // Remove partículas que já não são visíveis
+    if (particle.alpha <= 0) {
+      particles.splice(index, 1);
+    }
+  });
+
   // Atualiza plataformas e verifica colisão
   platforms.forEach((platform) => {
     platform.y += 2; // Move as plataformas para baixo
@@ -159,6 +200,7 @@ function gameLoop() {
       player.x < platform.x + platform.width
     ) {
       player.velocityY = player.jumpPower; // Permite que o porquinho pule novamente
+      createParticles(player.x + player.width / 2, player.y + player.height); // Cria partículas na posição do porquinho
     }
   });
 
