@@ -13,6 +13,8 @@ platformImage.src = 'imgs/fundo.png'; // Substitua pelo caminho da sua imagem da
 const backgroundImage = new Image();
 backgroundImage.src = 'imgs/fundo.jpg'; // Substitua pelo caminho da sua imagem de fundo
 
+const jumpSound = document.getElementById("jumpSound");
+
 // Definição do porquinho-da-índia
 const player = {
   x: 180,
@@ -48,7 +50,7 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = Math.random() * 5 + 2; // Tamanho aleatório da partícula
+    this.size = Math.random() * 1 + 2; // Tamanho aleatório da partícula
     this.speedY = Math.random() * -3 - 1; // Velocidade vertical aleatória
     this.speedX = Math.random() * 2 - 1; // Velocidade horizontal aleatória
     this.alpha = 1; // Opacidade inicial
@@ -204,6 +206,10 @@ function gameLoop() {
     ) {
       player.velocityY = player.jumpPower; // Permite que o porquinho pule novamente
       createParticles(player.x + player.width / 2, player.y + player.height); // Cria partículas na posição do porquinho
+      // Reproduz o som de pulo
+
+    jumpSound.currentTime = 0; // Reseta o tempo do som para que ele possa ser reproduzido novamente
+    jumpSound.play(); // Inicia o som de pulo
     }
   });
 
