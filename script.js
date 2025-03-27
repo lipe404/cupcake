@@ -90,7 +90,7 @@ class Particle {
 
 const particles = [];
 function createParticles(x, y) {
-  const particleCount = 15; // Número de partículas a serem geradas
+  const particleCount = 10; // Número de partículas a serem geradas
   for (let i = 0; i < particleCount; i++) {
     particles.push(new Particle(x, y));
   }
