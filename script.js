@@ -31,7 +31,7 @@ const player = {
   velocityX: 0,
   speed: 5,
   gravity: 0.2,
-  jumpPower: -7
+  jumpPower: -8
 };
 
 // Lista de plataformas
@@ -54,7 +54,9 @@ function createPlatforms() {
       x: Math.random() * (canvas.width - platformWidth),
       y: i * 100,
       width: platformWidth,
-      height: platformHeight
+      height: platformHeight,
+      direction: Math.random() < 0.5 ? 1 : -1, // Direção aleatória (1 para direita, -1 para esquerda)
+      speed: Math.random() * 2 + 1 // Velocidade aleatória entre 1 e 3
     });
   }
 }
@@ -168,6 +170,14 @@ function gameLoop() {
   // Atualiza plataformas e verifica colisão
   platforms.forEach((platform) => {
     platform.y += 2; // Move as plataformas para baixo
+    // Atualiza a posição horizontal da plataforma
+    platform.x += platform.direction * platform.speed; // Move a plataforma na direção especificada
+    
+    // Verifica se a plataforma atingiu as bordas da tela
+    if (platform.x <= 0 || platform.x + platform.width >= canvas.width) {
+      platform.direction *= -1; // Inverte a direção
+    }
+
     if (platform.y > canvas.height) {
       platform.y = -10;
       platform.x = Math.random() * (canvas.width - platform.width);
