@@ -52,6 +52,7 @@ class Particle {
     this.speedY = Math.random() * -3 - 1; // Velocidade vertical aleatória
     this.speedX = Math.random() * 2 - 1; // Velocidade horizontal aleatória
     this.alpha = 1; // Opacidade inicial
+    this.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, ${this.alpha})`; // Cor aleatória
   }
 
   update() {
@@ -61,15 +62,17 @@ class Particle {
   }
 
   draw(ctx) {
-    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`; // Cor branca com opacidade
+    ctx.fillStyle = this.color; // Cor da partícula
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowColor = this.color; // Adiciona sombra
+    ctx.shadowBlur = 10; // Intensidade da sombra
   }
 }
 const particles = [];
 function createParticles(x, y) {
-  const particleCount = 10; // Número de partículas a serem geradas
+  const particleCount = 15; // Número de partículas a serem geradas
   for (let i = 0; i < particleCount; i++) {
     particles.push(new Particle(x, y));
   }
