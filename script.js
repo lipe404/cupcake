@@ -1,3 +1,4 @@
+// Configurações do jogo
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = 400;
@@ -5,20 +6,25 @@ canvas.height = 600;
 
 // Carregar imagens
 const pigImage = new Image();
-pigImage.src = 'imgs/pig2.png'; // Substitua pelo caminho da sua imagem do porquinho
+pigImage.src = 'imgs/pig2.png';
 
 const platformImage = new Image();
-platformImage.src = 'imgs/fundo.png'; // Substitua pelo caminho da sua imagem da plataforma
+platformImage.src = 'imgs/fundo.png';
 
 const backgroundImage = new Image();
-backgroundImage.src = 'imgs/fundo.jpg'; // Substitua pelo caminho da sua imagem de fundo
+backgroundImage.src = 'imgs/fundo.jpg';
 
+// Carregar sons
 const jumpSound = document.getElementById("jumpSound");
+const gameMusic = document.getElementById("gameMusic");
+gameMusic.volume = 0.3; // Define o volume
+jumpSound.volume = 0.5; // Define o volume do som de pulo
+gameMusic.loop = true; // Habilita o loop da música
 
 // Definição do porquinho-da-índia
 const player = {
   x: 180,
-  y: 550, // Começa no chão
+  y: 550,
   width: 50,
   height: 50,
   velocityY: 0,
@@ -34,6 +40,13 @@ const platformCount = 6;
 const platformWidth = 80;
 const platformHeight = 10;
 
+// Variáveis do jogo
+let isGameRunning = false;
+let score = 0;
+let timeElapsed = 0;
+let gameInterval;
+
+// Funções do jogo
 function createPlatforms() {
   platforms.length = 0; // Limpa a lista de plataformas
   for (let i = 0; i < platformCount; i++) {
@@ -72,6 +85,7 @@ class Particle {
     ctx.shadowBlur = 10; // Intensidade da sombra
   }
 }
+
 const particles = [];
 function createParticles(x, y) {
   const particleCount = 15; // Número de partículas a serem geradas
@@ -79,37 +93,6 @@ function createParticles(x, y) {
     particles.push(new Particle(x, y));
   }
 }
-
-// Variáveis do jogo
-let isGameRunning = false;
-let score = 0;
-let timeElapsed = 0;
-let gameInterval;
-
-// Inicia o jogo
-document.getElementById("startButton").addEventListener("click", startGame);
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowLeft") {
-    player.velocityX = -player.speed;
-  } else if (event.key === "ArrowRight") {
-    player.velocityX = player.speed;
-  }
-});
-
-document.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-    player.velocityX = 0;
-  }
-});
-
-// Carregar o elemento de áudio
-const gameMusic = document.getElementById("gameMusic");
-
-// Configurar volume e loop
-gameMusic.volume = 0.3; // Define o volume
-jumpSound.volume = 0.5;
-gameMusic.loop = true; // Habilita o loop
 
 function startGame() {
   if (!isGameRunning) {
@@ -153,11 +136,10 @@ function gameLoop() {
   // Atualiza a posição do jogador
   player.velocityY += player.gravity;
   player.y += player.velocityY;
-  player.x += player.velocityX;
+ player.x += player.velocityX;
 
   // Mantém o jogador dentro da tela
-  if (player.x < 0) player.x = 0;
-  if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+  player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
 
   // Impede que caia da tela
   if (player.y > canvas.height) {
@@ -178,7 +160,6 @@ function gameLoop() {
   particles.forEach((particle, index) => {
     particle.update();
     particle.draw(ctx);
-    // Remove partículas que já não são visíveis
     if (particle.alpha <= 0) {
       particles.splice(index, 1);
     }
@@ -207,10 +188,8 @@ function gameLoop() {
     ) {
       player.velocityY = player.jumpPower; // Permite que o porquinho pule novamente
       createParticles(player.x + player.width / 2, player.y + player.height); // Cria partículas na posição do porquinho
-      // Reproduz o som de pulo
-
-    jumpSound.currentTime = 0; // Reseta o tempo do som para que ele possa ser reproduzido novamente
-    jumpSound.play(); // Inicia o som de pulo
+      jumpSound.currentTime = 0; // Reseta o tempo do som para que ele possa ser reproduzido novamente
+      jumpSound.play(); // Inicia o som de pulo
     }
   });
 
@@ -230,8 +209,25 @@ function endGame() {
 
   // Adiciona evento para reiniciar o jogo
   document.getElementById("restartButton").onclick = function() {
-      document.getElementById("gameOverMessage").classList.add("hidden");
-      document.getElementById("startButton").classList.remove("hidden"); // Mostra o botão de iniciar novamente
-      startGame(); // Reinicia o jogo
+    document.getElementById("gameOverMessage").classList.add("hidden");
+    document.getElementById("startButton").classList.remove("hidden"); // Mostra o botão de iniciar novamente
+    startGame(); // Reinicia o jogo
   };
 }
+
+// Eventos de controle
+document.getElementById("startButton").addEventListener("click", startGame);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") {
+    player.velocityX = -player.speed;
+  } else if (event.key === "ArrowRight") {
+    player.velocityX = player.speed;
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    player.velocityX = 0;
+  }
+});
