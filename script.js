@@ -107,7 +107,8 @@ document.addEventListener("keyup", (event) => {
 const gameMusic = document.getElementById("gameMusic");
 
 // Configurar volume e loop
-gameMusic.volume = 0.1; // Define o volume
+gameMusic.volume = 0.3; // Define o volume
+jumpSound.volume = 0.5;
 gameMusic.loop = true; // Habilita o loop
 
 function startGame() {
