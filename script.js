@@ -97,31 +97,49 @@ function updateStartScreenParticles() {
 }
 
 function drawStartScreen() {
+  // Limpa a tela
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(startScreenImage, -200, 0, canvas.width * 2, canvas.height);
+
+  // Desenha o background esticado
+  ctx.drawImage(startScreenImage, -275, 0, canvas.width * 2.4, canvas.height);
+
+  // Atualiza partículas
   updateStartScreenParticles();
+
+  // --------- TÍTULO ESTILIZADO ---------
   ctx.save();
-  ctx.fillStyle = "#FFC5C5";
-  ctx.font = 'bold 26px "Press Start 2P", cursive';
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, "#FF9EE7"); // rosa
+  gradient.addColorStop(0.5, "#C7AFFF"); // roxo claro
+  gradient.addColorStop(1, "#9EEFFF"); // azul claro
+
+  ctx.fillStyle = gradient;
+  ctx.font = 'bold 28px "Press Start 2P", cursive';
   ctx.textAlign = "center";
-  ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
-  ctx.shadowBlur = 5;
-  ctx.fillText(
-    "Cupcake e Seus Três Filhos",
-    canvas.width / 2,
-    canvas.height * 0.5
-  );
+  ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+  ctx.shadowBlur = 10;
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+  ctx.strokeText("Cupcake e Seus Três Filhos", canvas.width / 2, canvas.height * 0.5);
+  ctx.fillText("Cupcake e Seus Três Filhos", canvas.width / 2, canvas.height * 0.5);
   ctx.restore();
+
+  // --------- TEXTO "Pressione Enter" COM PISCAR ---------
   ctx.save();
+  ctx.font = '16px "Press Start 2P", cursive';
+  ctx.textAlign = "center";
+  ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+  ctx.shadowBlur = 5;
+
+  // Efeito de piscar (alfa alternando)
+  const blinkAlpha = 0.6 + 0.4 * Math.sin(Date.now() * 0.005);
+  ctx.globalAlpha = blinkAlpha;
+
   ctx.fillStyle = "#FFC5C5";
-  ctx.font = '20px "Press Start 2P", cursive';
-  ctx.fillText(
-    'Pressione "Enter" para começar',
-    canvas.width / 7,
-    canvas.height * 0.8
-  );
+  ctx.fillText('Pressione "Enter" para começar', canvas.width / 2, canvas.height * 0.75);
   ctx.restore();
 }
+
 
 function createPlatforms() {
   platforms.length = 0;
