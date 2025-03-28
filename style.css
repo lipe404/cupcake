@@ -40,6 +40,7 @@ canvas {
 
 #controls {
   display: flex;
+  display: none;
   justify-content: center; /* Centraliza horizontalmente */
   margin-top: 0px; /* Espaço acima do botão */
 }
@@ -148,4 +149,14 @@ canvas {
 
 .hidden {
   display: none; /* Classe para esconder elementos */
+}
+
+/* Adicione estilos para o texto na tela de início */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Efeito de pulso para o texto */
+@keyframes pulse {
+  0% { opacity: 0.7; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+  50% { opacity: 1; text-shadow: 0 0 20px rgba(255, 255, 255, 1); }
+  100% { opacity: 0.7; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
 }
