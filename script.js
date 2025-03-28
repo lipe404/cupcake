@@ -4,18 +4,20 @@ const ctx = canvas.getContext("2d");
 canvas.width = 400;
 canvas.height = 600;
 
+let gameOverParticles = [];
+
 // Carregar imagens
 const startScreenImage = new Image();
-startScreenImage.src = 'imgs/teladeinicio.jpg';
+startScreenImage.src = "imgs/teladeinicio.jpg";
 
 const pigImage = new Image();
-pigImage.src = 'imgs/pig2.png';
+pigImage.src = "imgs/pig2.png";
 
 const platformImage = new Image();
-platformImage.src = 'imgs/fundo.png';
+platformImage.src = "imgs/fundo.png";
 
 const backgroundImage = new Image();
-backgroundImage.src = 'imgs/fundo.jpg';
+backgroundImage.src = "imgs/fundo.jpg";
 
 // Carregar sons
 const jumpSound = document.getElementById("jumpSound");
@@ -34,7 +36,7 @@ const player = {
   velocityX: 0,
   speed: 5,
   gravity: 0.2,
-  jumpPower: -8
+  jumpPower: -8,
 };
 
 // Lista de plataformas
@@ -65,7 +67,7 @@ function initStartScreenParticles() {
       speed: Math.random() * 0.5 + 0.2,
       color: `hsl(${Math.random() * 360}, 100%, 70%)`,
       angle: Math.random() * Math.PI * 2,
-      rotationSpeed: Math.random() * 0.02 - 0.01
+      rotationSpeed: Math.random() * 0.02 - 0.01,
     });
   }
 }
@@ -99,17 +101,25 @@ function drawStartScreen() {
   ctx.drawImage(startScreenImage, -200, 0, canvas.width * 2, canvas.height);
   updateStartScreenParticles();
   ctx.save();
-  ctx.fillStyle = '#FFC5C5';
+  ctx.fillStyle = "#FFC5C5";
   ctx.font = 'bold 26px "Press Start 2P", cursive';
-  ctx.textAlign = 'center';
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+  ctx.textAlign = "center";
+  ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
   ctx.shadowBlur = 5;
-  ctx.fillText('Cupcake e Seus Três Filhos', canvas.width / 2, canvas.height * 0.5);
+  ctx.fillText(
+    "Cupcake e Seus Três Filhos",
+    canvas.width / 2,
+    canvas.height * 0.5
+  );
   ctx.restore();
   ctx.save();
-  ctx.fillStyle = '#FFC5C5';
+  ctx.fillStyle = "#FFC5C5";
   ctx.font = '20px "Press Start 2P", cursive';
-  ctx.fillText('Pressione "Enter" para começar', canvas.width / 7, canvas.height * 0.8);
+  ctx.fillText(
+    'Pressione "Enter" para começar',
+    canvas.width / 7,
+    canvas.height * 0.8
+  );
   ctx.restore();
 }
 
@@ -122,7 +132,7 @@ function createPlatforms() {
       width: platformWidth,
       height: platformHeight,
       direction: Math.random() < 0.5 ? 1 : -1,
-      speed: Math.random() * 2 + 1
+      speed: Math.random() * 2 + 1,
     });
   }
 }
@@ -135,7 +145,9 @@ class Particle {
     this.speedY = Math.random() * -3 - 1;
     this.speedX = Math.random() * 2 - 1;
     this.alpha = 1;
-    this.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, ${this.alpha})`;
+    this.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${
+      Math.random() * 255
+    }, ${this.alpha})`;
   }
   update() {
     this.x += this.speedX;
@@ -159,6 +171,40 @@ function createParticles(x, y) {
   }
 }
 
+// ------------------- PARTICULAS DO GAME OVER ---------------------
+class GameOverParticle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 2;
+    this.speedX = (Math.random() - 0.5) * 2;
+    this.speedY = (Math.random() - 0.5) * 2;
+    this.alpha = 1;
+    this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= 0.005;
+    if (this.alpha < 0) this.alpha = 0;
+  }
+  draw() {
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+function initGameOverParticles() {
+  gameOverParticles = [];
+  for (let i = 0; i < 100; i++) {
+    gameOverParticles.push(new GameOverParticle());
+  }
+}
+
 function startGame() {
   if (!isGameRunning) {
     isGameRunning = true;
@@ -175,10 +221,37 @@ function startGame() {
   }
 }
 
+function drawArcadeText(text, y) {
+  ctx.save();
+  ctx.translate(canvas.width / 2, y);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // Fonte pixelada retro
+  ctx.font = 'bold 32px "Press Start 2P", cursive';
+
+  // Contorno
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#000";
+  ctx.strokeText(text, 0, 0);
+
+  // Preenchimento principal
+  ctx.fillStyle = "#FFC5C5";
+  ctx.fillText(text, 0, 0);
+
+  // Glow (brilho)
+  ctx.shadowColor = "#FF5E5E";
+  ctx.shadowBlur = 15;
+  ctx.fillText(text, 0, 0);
+
+  ctx.restore();
+}
+
+
 function updateTime() {
   timeElapsed++;
   if (timeElapsed % 10 === 0) {
-    platforms.forEach(platform => {
+    platforms.forEach((platform) => {
       platform.y += 1;
     });
   }
@@ -222,7 +295,7 @@ function gameLoop() {
     }
   });
 
-  platforms.forEach(platform => {
+  platforms.forEach((platform) => {
     platform.y += 2;
     platform.x += platform.direction * platform.speed;
     if (platform.x <= 0 || platform.x + platform.width >= canvas.width) {
@@ -234,7 +307,13 @@ function gameLoop() {
       score++;
       document.getElementById("score").innerText = "Pontuação: " + score;
     }
-    ctx.drawImage(platformImage, platform.x, platform.y, platform.width, platform.height);
+    ctx.drawImage(
+      platformImage,
+      platform.x,
+      platform.y,
+      platform.width,
+      platform.height
+    );
     if (
       player.velocityY > 0 &&
       player.y + player.height > platform.y &&
@@ -257,6 +336,7 @@ function endGame() {
   clearInterval(gameInterval);
   gameMusic.pause();
   gameMusic.currentTime = 0;
+  initGameOverParticles();
 
   // Atualiza o high score
   if (score > highScore) {
@@ -264,21 +344,45 @@ function endGame() {
     localStorage.setItem("highScore", highScore);
   }
 
-  // Exibe tela de game over
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
-  ctx.font = "24px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 20);
-  ctx.fillText("Pontuação: " + score, canvas.width / 2, canvas.height / 2 + 20);
-  ctx.fillText("Recorde: " + highScore, canvas.width / 2, canvas.height / 2 + 60);
-  ctx.fillText("Pressione Enter", canvas.width / 2, canvas.height / 2 + 100);
+  // Exibe tela de Game Over com partículas e menu arcade
+  function drawGameOver() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(0,0,0,0.7)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Partículas de game over
+    gameOverParticles.forEach((p) => {
+      p.update();
+      p.draw();
+    });
+
+    // Texto em arco estilo fliperama
+    drawArcadeText("GAME OVER", 100, canvas.height / 2 - 50);
+
+    // Pontuação
+    ctx.fillStyle = "white";
+    ctx.font = "20px 'Press Start 2P', cursive";
+    ctx.textAlign = "center";
+    ctx.fillText(
+      `Pontuação: ${score}`,
+      canvas.width / 2,
+      canvas.height / 2 + 50
+    );
+    ctx.fillText(
+      `Recorde: ${highScore}`,
+      canvas.width / 2,
+      canvas.height / 2 + 80
+    );
+    ctx.fillText("Pressione Enter", canvas.width / 2, canvas.height / 2 + 130);
+
+    if (isGameOver) requestAnimationFrame(drawGameOver);
+  }
+
+  drawGameOver();
 }
 
 // Controles
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") {
     player.velocityX = -player.speed;
   } else if (e.key === "ArrowRight") {
@@ -294,7 +398,7 @@ document.addEventListener("keydown", e => {
   }
 });
 
-document.addEventListener("keyup", e => {
+document.addEventListener("keyup", (e) => {
   if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
     player.velocityX = 0;
   }
