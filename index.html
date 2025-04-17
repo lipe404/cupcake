@@ -2,31 +2,43 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
+        <!-- Configurações do site -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Configurações de SEO -->
+        <meta name="description" content="Jogo Cupcake e Seus Três Filhos - Um jogo divertido onde você ajuda o Cupcake a pular através de plataformas.">
+        <meta name="keywords" content="jogo, cupcake, filhos, pular, plataforma, divertido">
+        <meta name="author" content="@spaceman.404">
+        <meta name="theme-color" content="#ffcc00">
+        <link rel="icon" href="imgs/pig.png" type="image/png">
         <title>Cupcake e Seus Três Filhos</title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <!-- Cabeçalho do jogo -->
         <header>
-            <h1>Cupcake e Seus Três Filhos</h1>
+            <h1>Cupcake</h1>
         </header>
         <main>
+            <!-- Area do jogo -->
             <section id="game-container">
                 <canvas id="gameCanvas"></canvas>
                 <p id="score">Pontuação: 0</p>
             </section>
+            <!-- Controles do jogo -->
             <section id="controls">
-                <button id="startButton">Pula Porquinho</button>
+                <button id="startButton" aria-label="Iniciar Jogo"></button>
             </section>
-
+            <!-- Mensagem de Game Over -->
             <div id="gameOverMessage" class="hidden">
                 <h2>Game Over!</h2>
                 <p>Sua pontuação: <span id="finalScore">0</span></p>
                 <button id="restartButton">Reiniciar Jogo</button>
             </div>
         </main>
+        <!-- Trilha sonora e efeitos -->
         <audio id="gameMusic" src="midia/som.mp3" preload="auto"></audio>
         <audio id="jumpSound" src="midia/jump.mp3" preload="auto"></audio>
+        <!-- Scripts -->
         <script src="script.js"></script>
     </body>
 </html>

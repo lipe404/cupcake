@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 /* Estilo Geral do jogo */
 body {
   font-family: 'Press Start 2P', cursive;
@@ -7,27 +8,22 @@ body {
   padding: 0;
   overflow: hidden;
   animation: backgroundAnimation 10s infinite alternate;
+  -webkit-animation: backgroundAnimation 10s infinite alternate; /* ✅ Para melhor compatibilidade */
 }
-
-@keyframes backgroundAnimation {
-  0% { background: linear-gradient(90deg, #C9E4CA, #F7CAC9, #C5CAE9); }
-  100% { background: linear-gradient(90deg, #F7CAC9, #C5CAE9, #C9E4CA); }
-}
-
+/* Estilo do titulo  */
 h1 {
   font-size: 25px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   color: #FFC5C5;
   margin-bottom: 10px;
 }
-
+/* Estilo da pontuação */
 #score {
   font-size: 24px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   color: #6f7ee4;
   margin: 10px 0;
 }
-
 /* Estilo do canvas */
 canvas {
   display: block;
@@ -36,26 +32,24 @@ canvas {
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
   margin: 0px auto;
+  max-width: 90vw;
+  height: auto;
 }
-
+/* Estilo dos controles */
 #controls {
   display: flex;
-  display: none;
-  justify-content: center; /* Centraliza horizontalmente */
-  margin-top: 0px; /* Espaço acima do botão */
+  justify-content: center;
+  margin-top: 0px;
 }
-
 #game-container {
-  position: relative; /* Define o contêiner como relativo */
+  position: relative;
 }
-
 /* Estilo do botão */
 #startButton {
-  position: absolute; /* Permite que o botão seja posicionado em relação ao contêiner */
-  top: 50%; /* Centraliza verticalmente */
-  left: 50%; /* Centraliza horizontalmente */
-  transform: translate(-50%, -50%); /* Ajusta a posição para o centro exato */
-  z-index: 5; /* Garante que o botão fique acima do canvas */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
   display: inline-block;
   background: #ff00ff;
   border: none;
@@ -66,71 +60,39 @@ canvas {
   cursor: pointer;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-  transition: transform 0.2s ease, background 0.2s ease;
   margin-top: 0px;
+  transition: transform 0.2s ease, background 0.2s ease;
+  transform: translate(-50%, -50%);
 }
-
 #startButton:hover {
   background: #ff33ff;
 }
-
-/* Adicione mais elementos decorativos */
-.triangulo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 50px 0 50px 86.6px;
-  border-color: transparent transparent transparent #C9E4CA;
+#startButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
 }
-
-.circulo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: #F7CAC9;
-  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
-}
-
-.linha {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 2px;
-  background-color: #C5CAE9;
-}
-
+/* Estilo do botão de game over */
 #gameOverMessage {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.9);
   border: 2px solid #ff00ff;
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
-  z-index: 10; /* Para garantir que fique acima do canvas */
+  z-index: 10;
+  max-width: 80%;
+  backdrop-filter: blur(5px);
+  transform: translate(-50%, -50%);
 }
-
 #gameOverMessage h2 {
   color: #ff00ff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
-
 #gameOverMessage p {
   color: #333;
 }
-
 #restartButton {
   background: #ff00ff;
   border: none;
@@ -142,21 +104,22 @@ canvas {
   box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
   transition: background 0.2s ease;
 }
-
 #restartButton:hover {
   background: #ff33ff;
 }
-
 .hidden {
-  display: none; /* Classe para esconder elementos */
+  display: none;
 }
-
-/* Adicione estilos para o texto na tela de início */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 /* Efeito de pulso para o texto */
 @keyframes pulse {
   0% { opacity: 0.7; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
   50% { opacity: 1; text-shadow: 0 0 20px rgba(255, 255, 255, 1); }
   100% { opacity: 0.7; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+}
+@keyframes backgroundAnimation {
+  0% { background: linear-gradient(90deg, #C9E4CA, #F7CAC9, #C5CAE9); }
+  25% { background: linear-gradient(90deg, #F7CAC9, #C5CAE9, #C9E4CA); }
+  50% { background: linear-gradient(90deg, #C5CAE9, #C9E4CA, #F7CAC9); }
+  75% { background: linear-gradient(90deg, #C9E4CA, #F7CAC9, #C5CAE9); }
+  100% { background: linear-gradient(90deg, #F7CAC9, #C5CAE9, #C9E4CA); }
 }

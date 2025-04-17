@@ -114,14 +114,14 @@ function drawStartScreen() {
   gradient.addColorStop(1, "#9EEFFF"); // azul claro
 
   ctx.fillStyle = gradient;
-  ctx.font = 'bold 28px "Press Start 2P", cursive';
+  ctx.font = 'bold 30px "Press Start 2P", cursive';
   ctx.textAlign = "center";
   ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
   ctx.shadowBlur = 10;
   ctx.lineWidth = 2;
   ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-  ctx.strokeText("Cupcake e Seus Três Filhos", canvas.width / 2, canvas.height * 0.5);
-  ctx.fillText("Cupcake e Seus Três Filhos", canvas.width / 2, canvas.height * 0.5);
+  ctx.strokeText("Cupcake", canvas.width / 2, canvas.height * 0.5);
+  ctx.fillText("Cupcake", canvas.width / 2, canvas.height * 0.5);
   ctx.restore();
 
   // --------- TEXTO "Pressione Enter" COM PISCAR ---------
@@ -136,7 +136,7 @@ function drawStartScreen() {
   ctx.globalAlpha = blinkAlpha;
 
   ctx.fillStyle = "#FFC5C5";
-  ctx.fillText('Pressione "Enter" para começar', canvas.width / 2, canvas.height * 0.75);
+  ctx.fillText('Pressione "Enter"', canvas.width / 2, canvas.height * 0.75);
   ctx.restore();
 }
 
