@@ -27,6 +27,12 @@ backgroundImage.src = "imgs/fundo.jpg";
 // Carregar sons
 const jumpSound = document.getElementById("jumpSound");
 const gameMusic = document.getElementById("gameMusic");
+// Variáveis de correção
+let lastTime = 0;
+let deltaTime = 0;
+const TARGET_FPS = 60;
+const FIXED_TIMESTEP = 1000 / TARGET_FPS;
+// Audio
 gameMusic.volume = 0.3;
 jumpSound.volume = 0.5;
 gameMusic.loop = true;
@@ -105,7 +111,7 @@ function drawStartScreen() {
   // Desenha o background esticado
   ctx.drawImage(startScreenImage, -275, 0, canvas.width * 2.4, canvas.height);
   // Atualiza partículas
-  updateStartScreenParticles()
+  updateStartScreenParticles();
   // TÍTULO ESTILIZADO
   ctx.save();
   const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
@@ -146,7 +152,6 @@ function createPlatforms() {
       height: platformHeight,
       direction: Math.random() < 0.5 ? 1 : -1,
       speed: 1.5 + Math.random() * 0.5, // Entre 1.5 e 2.0, mais controlado
-
     });
   }
 }
@@ -223,12 +228,24 @@ function startGame() {
     isGameOver = false;
     score = 0;
     timeElapsed = 0;
+
+    // ✅ RESETAR TEMPO - ISSO É CRUCIAL
+    lastTime = performance.now();
+    deltaTime = 0;
+
     // Resetar jogador
     player.x = 180;
     player.y = 550;
     player.velocityY = player.jumpPower;
+    player.velocityX = 0; // ✅ Garantir que não há movimento horizontal inicial
+
     createPlatforms();
-    gameLoop();
+
+    // ✅ Pequeno delay para estabilizar
+    setTimeout(() => {
+      gameLoop(performance.now());
+    }, 100);
+
     gameInterval = setInterval(updateTime, 1000);
     document.getElementById("startButton").style.display = "none";
     gameMusic.play();
@@ -265,31 +282,48 @@ function updateTime() {
   }
 }
 // Função principal do jogo
-function gameLoop() {
+function gameLoop(currentTime = performance.now()) {
   if (isStartScreen) {
     drawStartScreen();
     requestAnimationFrame(gameLoop);
     return;
   }
+
   if (!isGameRunning) return;
+
+  // ✅ Calcular deltaTime de forma controlada
+  if (lastTime === 0) lastTime = currentTime;
+  deltaTime = Math.min(currentTime - lastTime, FIXED_TIMESTEP * 2); // Limitar deltaTime máximo
+  lastTime = currentTime;
+
+  // ✅ Normalizar deltaTime para 60fps
+  const timeMultiplier = deltaTime / FIXED_TIMESTEP;
+
   // Limpa a tela e desenha o fundo
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-  // Atualiza e desenha o porquinho-da-índia
-  player.velocityY += player.gravity;
-  player.y += player.velocityY;
-  player.x += player.velocityX;
+
+  // ✅ Atualiza o player com deltaTime controlado
+  player.velocityY += player.gravity * timeMultiplier;
+  player.y += player.velocityY * timeMultiplier;
+  player.x += player.velocityX * timeMultiplier;
+
+  // Resto da função permanece igual...
   player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
+
   if (player.y > canvas.height) {
     endGame();
     return;
   }
+
   if (player.y < MAX_JUMP_HEIGHT) {
     player.y = MAX_JUMP_HEIGHT;
     player.velocityY = 0;
   }
+
   // Desenha o porquinho-da-índia
   ctx.drawImage(pigImage, player.x, player.y, player.width, player.height);
+
   // Desenha as partículas de pulo
   particles.forEach((particle, index) => {
     particle.update();
@@ -298,19 +332,23 @@ function gameLoop() {
       particles.splice(index, 1);
     }
   });
-  // Desenha as plataformas
+
+  // ✅ Atualiza plataformas com deltaTime
   platforms.forEach((platform) => {
-    platform.y += 2;
-    platform.x += platform.direction * platform.speed;
+    platform.y += 2 * timeMultiplier;
+    platform.x += platform.direction * platform.speed * timeMultiplier;
+
     if (platform.x <= 0 || platform.x + platform.width >= canvas.width) {
       platform.direction *= -1;
     }
+
     if (platform.y > canvas.height) {
       platform.y = -10;
       platform.x = Math.random() * (canvas.width - platform.width);
       score++;
       document.getElementById("score").innerText = "Pontuação: " + score;
     }
+
     ctx.drawImage(
       platformImage,
       platform.x,
@@ -318,6 +356,8 @@ function gameLoop() {
       platform.width,
       platform.height
     );
+
+    // Detecção de colisão permanece igual
     if (
       player.velocityY > 0 &&
       player.y + player.height > platform.y &&
@@ -330,6 +370,7 @@ function gameLoop() {
       createParticles(player.x + player.width / 2, player.y + player.height);
     }
   });
+
   requestAnimationFrame(gameLoop);
 }
 // Função para finalizar o jogo
@@ -385,10 +426,15 @@ document.addEventListener("keydown", (e) => {
   } else if (e.key === "Enter") {
     if (isStartScreen) {
       isStartScreen = false;
-      startGame();
+      // ✅ Pequeno delay antes de iniciar
+      setTimeout(() => {
+        startGame();
+      }, 200);
     } else if (isGameOver) {
       isGameOver = false;
-      startGame();
+      setTimeout(() => {
+        startGame();
+      }, 200);
     }
   }
 });
@@ -401,4 +447,3 @@ document.addEventListener("keyup", (e) => {
 // Iniciar partículas da tela de início
 initStartScreenParticles();
 gameLoop();
-
